@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+
 module tb_fft8_dif_sdf;
 // -------------------------------
 // DUT signals
