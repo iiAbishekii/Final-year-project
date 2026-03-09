@@ -1,0 +1,60 @@
+# ==========================================
+# FFT8 RADIX2 SDF STREAM TOP - 45nm
+# Cadence Genus Compatible SDC
+# ==========================================
+
+# Clock (100 MHz)
+create_clock -name clk -period 10 [get_ports clk]
+
+# Clock properties
+set_clock_uncertainty 0.1 [get_clocks clk]
+set_clock_latency 0.2 [get_clocks clk]
+set_clock_transition 0.5 [get_clocks clk]
+
+# Input/Output delays
+set INPUT_DELAY 1.0
+set OUTPUT_DELAY 1.0
+set MIN_DELAY 0.2
+
+set all_inputs_no_clk [remove_from_collection [all_inputs] [get_ports clk]]
+set all_outputs_ports [all_outputs]
+
+set_input_delay  -clock clk -max $INPUT_DELAY  $all_inputs_no_clk
+set_input_delay  -clock clk -min $MIN_DELAY    $all_inputs_no_clk
+set_output_delay -clock clk -max $OUTPUT_DELAY $all_outputs_ports
+set_output_delay -clock clk -min $MIN_DELAY    $all_outputs_ports
+
+# Output load
+set_load 0.1 $all_outputs_ports
+
+# Max transition
+set_max_transition 0.5 [current_design]
+
+# ==========================================
+# Power Intent (Genus-specific)
+# ==========================================
+
+# Activity factors for power estimation
+set_switching_activity -static_probability 0.5 -toggle_rate 0.25 [all_inputs]
+
+# Per-module activity annotation (toggle rate in transitions/ns at 100MHz)
+set_switching_activity -static_probability 0.5 -toggle_rate 0.25 \
+    [get_nets -hierarchical -filter {module == fft8_radix2_sdf_stream_top}]
+
+set_switching_activity -static_probability 0.5 -toggle_rate 0.20 \
+    [get_nets -hierarchical -filter {module == stage1_radix2_sdf}]
+
+set_switching_activity -static_probability 0.5 -toggle_rate 0.20 \
+    [get_nets -hierarchical -filter {module == stage2_radix2_sdf_stream}]
+
+set_switching_activity -static_probability 0.5 -toggle_rate 0.20 \
+    [get_nets -hierarchical -filter {module == stage3_radix2_sdf_stream}]
+
+set_switching_activity -static_probability 0.5 -toggle_rate 0.30 \
+    [get_nets -hierarchical -filter {module == csd_sqrt2_inv}]
+
+set_switching_activity -static_probability 0.5 -toggle_rate 0.15 \
+    [get_nets -hierarchical -filter {module == bit_inv_decoder}]
+
+set_switching_activity -static_probability 0.5 -toggle_rate 0.15 \
+    [get_nets -hierarchical -filter {module == bit_inv_encoder}]

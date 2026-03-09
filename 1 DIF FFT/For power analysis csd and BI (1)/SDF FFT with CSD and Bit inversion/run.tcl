@@ -1,8 +1,6 @@
 # ==========================================
 # FFT8 RADIX2 SDF STREAM - 45nm Synthesis
 # Cadence Genus Flow (with Power Analysis)
-# NOTE: tb_fft8_radix2_sdf_stream_top is
-#       EXCLUDED (testbench, not synthesizable)
 # ==========================================
 
 # ------------------------------------------
@@ -23,6 +21,8 @@ read_hdl -language v { \
     stage2_radix2_sdf_stream.v \
     stage3_radix2_sdf_stream.v \
     csd_sqrt2_inv.v \
+    bit_inv_decoder.v \
+    bit_inv_encoder.v \
 }
 
 # ------------------------------------------
@@ -75,6 +75,8 @@ foreach mod { \
     stage2_radix2_sdf_stream \
     stage3_radix2_sdf_stream \
     csd_sqrt2_inv \
+    bit_inv_decoder \
+    bit_inv_encoder \
 } {
     report_power -instance [get_cells -hierarchical $mod] \
         >> power_fft8_sdf_45nm_hier.rpt
