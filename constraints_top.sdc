@@ -1,12 +1,13 @@
 # ==========================================
-# FFT8 SDF + CSD (Optimized, No Bit-Inv)
+# FFT8 SDF + CSD + SPST Han-Carlson Adder
 # Cadence Genus Compatible SDC — 45nm
 # ==========================================
 
 # ------------------------------------------
 # Clock — 100 MHz (10 ns period)
 # Tight enough to force synthesis to optimize
-# the CSD shift-adder chain in stage3.
+# the CSD shift-adder chain in stage3 and
+# the SPST Han-Carlson prefix tree in all stages.
 # ------------------------------------------
 create_clock -name clk -period 10 [get_ports clk]
 
